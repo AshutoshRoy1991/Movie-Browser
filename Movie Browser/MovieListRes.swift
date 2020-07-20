@@ -19,6 +19,19 @@ public struct MovieListModel: Codable {
         case totalPages = "total_pages"
         case results
     }
+    
+    var hasMorePages: Bool {
+        get {
+            return page < totalPages
+        }
+    }
+    
+    var nextPage: Int {
+        get {
+            return hasMorePages ? page + 1 : page
+        }
+    }
+    
 }
 
 // MARK: - Result

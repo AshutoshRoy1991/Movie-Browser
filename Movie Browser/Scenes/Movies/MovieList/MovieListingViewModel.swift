@@ -27,12 +27,22 @@ class MovieListingViewModel {
     
     var moviesData :[MovieResult] = []
     
+    var hasMorePages: Bool = false
+    var nextPage: Int = 1
+    
     func fetchMovies(currentPage: Int, filter: MovieListFilter, showLoader: Bool = false, completion: (() -> Void)?) {
+        if currentPage == 1 {
+            moviesData = []
+            hasMorePages = false
+            nextPage = 1
+            
+        }
         movieClient.getMovies(page: currentPage, filter: filter, completion: {[weak self] result in
             switch result {
             case .success(let movieResult):
                 guard let movieResult = movieResult else { return }
-                self?.moviesData = movieResult.results
+//                self?.moviesData = movieResult.results
+                self?.processMovieResult(movieResult)
                 completion?()
             case .failure(let error):
                 print(error)
@@ -40,4 +50,12 @@ class MovieListingViewModel {
         })
     }
     
+    func processMovieResult(_ movieResult: MovieListModel) {
+
+        let fetchedMovies = movieResult.results
+        self.moviesData.append(contentsOf: fetchedMovies)
+        self.hasMorePages = movieResult.hasMorePages
+        self.nextPage = movieResult.nextPage
+        
+    }
 }

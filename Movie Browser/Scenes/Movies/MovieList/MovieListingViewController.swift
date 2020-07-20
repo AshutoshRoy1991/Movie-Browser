@@ -39,6 +39,14 @@ class MovieListingViewController: UIViewController {
         })
     }
     
+    func fetchNextMoviesFromRemote() {
+        viewModel.fetchMovies(currentPage: viewModel.nextPage, filter: filter, completion: {
+            DispatchQueue.main.async {
+                self.moviesCollectionView.reloadData()
+            }
+        })
+    }
+    
     func setUpGridView() {
         let grid = moviesCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         grid.minimumInteritemSpacing = CGFloat(self.cellMargin)
@@ -79,10 +87,10 @@ extension MovieListingViewController: UICollectionViewDelegate, UICollectionView
         let posterpath = movie.posterPath
         posterURL = URL(string: URLConfiguration.mediaPath + (posterpath ?? ""))
         
-        cell.posterImage.image = UIImage(named: "example")
+        cell.posterImage.image = UIImage(named: "placeHolderImage")
         cell.posterImage.kf.setImage(with: posterURL)
         cell.posterImage.kf.setImage(with: posterURL,
-                                     placeholder: UIImage(named: "example"))
+                                     placeholder: UIImage(named: "placeHolderImage"))
         return cell
     }
     
@@ -93,6 +101,17 @@ extension MovieListingViewController: UICollectionViewDelegate, UICollectionView
         if let aViewController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MovieDetailViewController") as? MovieDetailViewController {
             aViewController.viewModel = MovieDetailViewModel(movie)
             self.navigationController?.pushViewController(aViewController, animated: true)
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if viewModel.hasMorePages {
+            if indexPath.row == viewModel.moviesData.count - 1 {
+                viewModel.hasMorePages = false
+                fetchNextMoviesFromRemote()
+            }
+        }
+        else{
+            print("end")
         }
     }
 }

@@ -124,7 +124,7 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
         let posterpath = movie.posterPath
         posterURL = URL(string: URLConfiguration.mediaPath + (posterpath ?? ""))
         
-        cell.posterImage.image = UIImage(named: "example")
+        cell.posterImage.image = UIImage(named: "placeHolderImage")
         cell.posterImage.kf.setImage(with: posterURL)
         cell.posterImage.kf.setImage(with: posterURL,
                                      placeholder: UIImage(named: "placeHolderImage"))
