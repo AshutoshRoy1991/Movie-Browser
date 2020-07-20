@@ -44,6 +44,40 @@ class MovieSearchViewController: UIViewController {
 
 extension MovieSearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+        if searchText == "" {
+            self.placeHolderView.isHidden = false
+            self.searchedResultCollectionView.isHidden = true
+            searchBar.resignFirstResponder()
+        }
+//        if searchText != "" {
+//            viewModel.searchMovies(searchText: searchText) {
+//                if(self.viewModel.moviesData.count>0)
+//                {
+//                    DispatchQueue.main.async {
+//                        self.placeHolderView.isHidden = true
+//                        self.searchedResultCollectionView.isHidden = false
+//                        self.searchedResultCollectionView.reloadData()
+//                    }
+//                }
+//                else {
+//                    DispatchQueue.main.async {
+//                        self.placeHolderView.isHidden = false
+//                        self.searchedResultCollectionView.isHidden = true
+//                    }
+//                }
+//            }
+//            print(searchText)
+//        }
+//        else {
+//            self.placeHolderView.isHidden = false
+//            self.searchedResultCollectionView.isHidden = true
+//            searchBar.resignFirstResponder()
+//        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text else { return }
         if searchText != "" {
             viewModel.searchMovies(searchText: searchText) {
                 if(self.viewModel.moviesData.count>0)
@@ -68,7 +102,10 @@ extension MovieSearchViewController: UISearchBarDelegate {
             self.searchedResultCollectionView.isHidden = true
             searchBar.resignFirstResponder()
         }
+        searchBar.resignFirstResponder()
     }
+    
+    
 }
 
 
@@ -85,12 +122,12 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
         
         var posterURL: URL?
         let posterpath = movie.posterPath
-        posterURL = URL(string: URLConfiguration.mediaPath + posterpath)
+        posterURL = URL(string: URLConfiguration.mediaPath + (posterpath ?? ""))
         
         cell.posterImage.image = UIImage(named: "example")
         cell.posterImage.kf.setImage(with: posterURL)
         cell.posterImage.kf.setImage(with: posterURL,
-                                     placeholder: UIImage(named: "example"))
+                                     placeholder: UIImage(named: "placeHolderImage"))
         return cell
     }
     

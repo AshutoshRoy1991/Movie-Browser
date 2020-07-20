@@ -16,25 +16,27 @@ class MovieListingViewController: UIViewController {
     var estimatedWidth = 150
     var cellMargin = 16
     
+    var filter : MovieListFilter = .popular
+    
     var viewModel = MovieListingViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Popular Movies"
-        //        loadMovies(forPage: 1)
         
-//        self.moviesCollectionView.delegate = self
-//        self.moviesCollectionView.dataSource = self
+        fetchMovieFromRemote()
         
-        viewModel.fetchMovies(currentPage: 1, filter: .popular, completion: {
+        // Do any additional setup after loading the view.
+        moviesCollectionView.register(UINib(nibName: "moviewListCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "moviewListCollectionViewCell")
+    }
+    
+    func fetchMovieFromRemote() {
+        viewModel.fetchMovies(currentPage: 1, filter: filter, completion: {
             DispatchQueue.main.async {
                 self.moviesCollectionView.reloadData()
             }
         })
-        
-        // Do any additional setup after loading the view.
-        moviesCollectionView.register(UINib(nibName: "moviewListCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "moviewListCollectionViewCell")
     }
     
     func setUpGridView() {
@@ -48,6 +50,17 @@ class MovieListingViewController: UIViewController {
         DispatchQueue.main.async {
             self.moviesCollectionView.reloadData()
         }
+    }
+    
+    @IBAction func sortButtonClicked(_ sender: Any) {
+        switch filter {
+        case .popular:
+            filter = .topRated
+        case .topRated:
+            filter = .popular
+        }
+        self.title = filter.title
+        fetchMovieFromRemote()
     }
     
 }
@@ -64,7 +77,7 @@ extension MovieListingViewController: UICollectionViewDelegate, UICollectionView
         
         var posterURL: URL?
         let posterpath = movie.posterPath
-        posterURL = URL(string: URLConfiguration.mediaPath + posterpath)
+        posterURL = URL(string: URLConfiguration.mediaPath + (posterpath ?? ""))
         
         cell.posterImage.image = UIImage(named: "example")
         cell.posterImage.kf.setImage(with: posterURL)

@@ -23,7 +23,7 @@ extension APIClient {
                                             decodingType: T.Type,
                                             //                                            context: NSManagedObjectContext? = nil,
         completionHandler completion: JSONTaskCompletionHandler?) -> URLSessionDataTask {
-        let task = session.dataTask(with: request) { data, response, _ in
+        let task = session.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion?(nil, .requestFailed)
                 return

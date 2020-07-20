@@ -53,7 +53,7 @@
             </objects>
             <point key="canvasLocation" x="1048" y="938"/>
         </scene>
-        <!--Movie Search View Controller-->
+        <!--Search-->
         <scene sceneID="Tq5-IY-ZbC">
             <objects>
                 <viewController id="5Iw-nD-hB6" customClass="MovieSearchViewController" customModule="Movie_Browser" customModuleProvider="target" sceneMemberID="viewController">
@@ -125,7 +125,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KEU-ol-yzG"/>
                     </view>
-                    <navigationItem key="navigationItem" id="w1O-K0-Ve7"/>
+                    <navigationItem key="navigationItem" title="Search" id="w1O-K0-Ve7"/>
                     <connections>
                         <outlet property="placeHolderView" destination="7KL-u0-dhH" id="bYY-HQ-zi7"/>
                         <outlet property="searchBar" destination="P8U-nc-yXn" id="oRi-TJ-dLo"/>
@@ -236,7 +236,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kMu-bA-qlm"/>
                     </view>
-                    <navigationItem key="navigationItem" id="VEv-K4-x4x"/>
+                    <navigationItem key="navigationItem" id="VEv-K4-x4x">
+                        <barButtonItem key="rightBarButtonItem" title="Sort" id="nGW-cr-oEd">
+                            <connections>
+                                <action selector="sortButtonClicked:" destination="Q0O-GU-lcZ" id="M66-es-OTI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="moviesCollectionView" destination="hFf-Ut-E9i" id="DUa-Pa-Dsc"/>
                     </connections>
